@@ -12,9 +12,7 @@ use op::*;
 fn main() -> Result<(), io::Error>{
 
     let path = "./data";
-
     let mut reader = Reader::new(path);
-
     let mut map = load(&mut reader);
 
     loop {
@@ -26,7 +24,7 @@ fn main() -> Result<(), io::Error>{
 
         let op_code = opcode(&mut buffer);
 
-        op(&mut map, op_code);
+        op(&mut map, op_code, path);
 
     }
 }

@@ -12,6 +12,7 @@ pub enum OpCode<'a> {
     Invalid,               //非法的操作
 }
 
+/// 按照空格分割输入的命令，返回动态数组
 pub fn split_buf(buf: &str) -> Vec<&str> {
     let bufs:Vec<&str> = buf.split_whitespace().collect();
     if bufs.len() == 0 {
@@ -20,7 +21,7 @@ pub fn split_buf(buf: &str) -> Vec<&str> {
     bufs
 }
 
-
+/// 解析set、get指令
 pub fn opcode(buf: &str) -> OpCode {
     use OpCode::*;
     let bufs = split_buf(buf);
@@ -47,12 +48,12 @@ pub fn opcode(buf: &str) -> OpCode {
     }
 }
 
-pub fn op(map: &mut HashMap<String, String>, opcode: OpCode) {
+pub fn op(map: &mut HashMap<String, String>, opcode: OpCode, path: &str) {
     use OpCode::*;
     match opcode {
         SET(key, value) => {
             let mut data = DataRow::new(key, value, 0);
-            set(map, key, &mut data);
+            set(map, key, &mut data, path);
         },
         GET(key) => {
             let value = get(map, key);

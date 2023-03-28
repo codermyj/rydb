@@ -10,6 +10,5 @@ pub fn load(reader: &mut Reader) -> HashMap<String, String>{
     for datarow in data_all.into_iter() {
         map.insert(datarow.key.clone(), datarow.value.clone());
     }
-
     map
 }

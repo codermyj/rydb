@@ -32,7 +32,6 @@ impl DataRow {
             .create(true)
             .write(true)
             .append(true)
-            .append(true)
             .read(true)
             .open(path)?;
         file.write(self.to_bytes().as_slice())?;
