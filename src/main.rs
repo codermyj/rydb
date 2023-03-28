@@ -5,7 +5,7 @@ mod op;
 
 use std::io;
 use std::io::{stdin, stdout, Write};
-use storage::chunk::{DataRow, Reader};
+use storage::chunk::Reader;
 use crate::server::load_chunk::load;
 use op::*;
 
@@ -24,7 +24,6 @@ fn main() -> Result<(), io::Error>{
 
         let op_code = opcode(&mut buffer);
 
-        op(&mut map, op_code, path);
-
+        op(&mut map, op_code, path)?;
     }
 }

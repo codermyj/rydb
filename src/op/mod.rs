@@ -3,13 +3,20 @@ pub mod api;
 use api::*;
 
 use std::collections::HashMap;
+use std::io;
 use crate::storage::chunk::DataRow;
 
+/// 操作码枚举类型
+/// SET：set操作
+/// GET：get操作
+/// None: 无任何操作
+/// Invalid：非法操作
 pub enum OpCode<'a> {
-    SET(&'a str, &'a str), //Set操作
-    GET(&'a str),          //Get操作
-    None,                  //无任何操作，即回车
-    Invalid,               //非法的操作
+    /// Set操作
+    SET(&'a str, &'a str),
+    GET(&'a str),
+    None,
+    Invalid,
 }
 
 /// 按照空格分割输入的命令，返回动态数组
@@ -48,12 +55,12 @@ pub fn opcode(buf: &str) -> OpCode {
     }
 }
 
-pub fn op(map: &mut HashMap<String, String>, opcode: OpCode, path: &str) {
+pub fn op(map: &mut HashMap<String, String>, opcode: OpCode, path: &str) -> Result<(), io::Error>{
     use OpCode::*;
     match opcode {
         SET(key, value) => {
             let mut data = DataRow::new(key, value, 0);
-            set(map, key, &mut data, path);
+            set(map, key, &mut data, path)?;
         },
         GET(key) => {
             let value = get(map, key);
@@ -64,4 +71,5 @@ pub fn op(map: &mut HashMap<String, String>, opcode: OpCode, path: &str) {
             println!("非法操作!");
         }
     }
+    Ok(())
 }
