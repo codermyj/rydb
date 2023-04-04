@@ -55,21 +55,18 @@ pub fn opcode(buf: &str) -> OpCode {
     }
 }
 
-pub fn op(map: &mut HashMap<String, String>, opcode: OpCode, path: &str) -> Result<(), io::Error>{
+pub fn op(map: &mut HashMap<String, String>, opcode: OpCode, path: &str) -> Result<String, io::Error>{
     use OpCode::*;
-    match opcode {
+    let str = match opcode {
         SET(key, value) => {
             let mut data = DataRow::new(key, value, 0);
             set(map, key, &mut data, path)?;
+            "SET operate successful".to_string()
         },
-        GET(key) => {
-            let value = get(map, key);
-            println!("{}", value);
-        },
-        None => {},
-        Invalid => {
-            println!("非法操作!");
-        }
-    }
-    Ok(())
+        GET(key) => get(map, key) ,
+        None => "".to_string(),
+        Invalid => "Invalid Operate!".to_string()
+    };
+
+    Ok(str)
 }
