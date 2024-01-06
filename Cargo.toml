@@ -13,3 +13,4 @@ strip = true
 
 [dependencies]
 chrono = "0.4.24"
+tokio = "1.35.1"
