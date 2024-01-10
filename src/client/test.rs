@@ -11,6 +11,11 @@ async fn main() -> Result<()> {
     // Get key "hello"
     let result = client.get("hello").await?;
 
+    let str = "Tokio test".to_string();
+
+    println!("tokio is {}", str);
+
     println!("got value from the server; result={:?}", result);
 
     Ok(())
+}
