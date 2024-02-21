@@ -73,3 +73,79 @@ func FmtFunc(inTime string, fmtStr string) string {
 
 	return outTime.Format("2006-01-02 15:04:05")
 }
+
+// 生成Control文件
+func GenCtl(config Config) {
+	//fmt.Println(config)
+
+	ctlName := config.Table + "_" + time.Now().Format("20060102150405") + ".ctl"
+	dataFileName := config.File + "_" + time.Now().Format("20060102150405") + ".tmp"
+
+	fieldsOrder := config.Table
+
+	if len(config.TableFields) != 0 && len(config.FileFields) != 0 {
+		if len(config.TableFields) != len(config.FileFields) {
+			fmt.Println("设置的数据文件字段数目与表字段列表数目不一致")
+			os.Exit(1)
+		}
+		fieldsOrder = fieldsOrder + "(" + strings.Join(config.TableFields, ",") + ")"
+	}
+
+	fileFields := config.FileFields
+	var ctl string
+
+	if len(fileFields) == 0 {
+		ctl = fmt.Sprintf(
+			"file '%v' delimiter '%v' %v;\ninsert into %v;",
+			dataFileName, config.Delimiter, config.Numcols, fieldsOrder)
+	} else {
+		ctl = fmt.Sprintf(
+			"file '%v' delimiter '%v' %v;\ninsert into %v values(",
+			dataFileName, config.Delimiter, config.Numcols, fieldsOrder)
+
+		i := 1
+		//var cols []int
+		for _, col := range fileFields {
+			//cols = append(cols, col)
+			if i != 1 {
+				ctl = ctl + ","
+			}
+			ctl = ctl + fmt.Sprintf("f%02s", strconv.Itoa(col))
+			i += 1
+		}
+
+		ctl += ");"
+
+	}
+
+	f1, err := os.Create(ctlName)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer f1.Close()
+	_, err = f1.WriteString(ctl)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	f2, err := os.Create("tmp_ctlname")
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer f2.Close()
+	_, err = f2.WriteString(ctlName)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	f3, err := os.Create("tmp_datafilename")
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer f3.Close()
+	_, err = f3.WriteString(dataFileName)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+}
