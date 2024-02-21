@@ -52,3 +52,24 @@ func main() {
 	}
 
 }
+
+func FmtFunc(inTime string, fmtStr string) string {
+
+	fmtStr = strings.ToLower(fmtStr)
+
+	fmtStr = strings.ReplaceAll(fmtStr, "yyyy", "2006")
+	fmtStr = strings.ReplaceAll(fmtStr, "mm", "01")
+	fmtStr = strings.ReplaceAll(fmtStr, "dd", "02")
+	fmtStr = strings.ReplaceAll(fmtStr, "hh", "15")
+	fmtStr = strings.ReplaceAll(fmtStr, "mi", "04")
+	fmtStr = strings.ReplaceAll(fmtStr, "ss", "05")
+
+	//fmt.Println(fmtStr)
+
+	outTime, err := time.Parse(fmtStr, inTime)
+	if err != nil {
+		return inTime
+	}
+
+	return outTime.Format("2006-01-02 15:04:05")
+}
