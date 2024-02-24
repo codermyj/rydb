@@ -147,5 +147,36 @@ func GenCtl(config Config) {
 	if err != nil {
 		fmt.Println(err)
 	}
+}
 
+func ReadLines(path string, config map[int]string, delimiter string, enclose string, hasTitle int) error {
+	file, err := os.Open(path)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	//var lines []string
+	scanner := bufio.NewScanner(file)
+
+	//var row1 []string
+
+	for scanner.Scan() {
+		if hasTitle == 1 {
+			hasTitle = 0
+			continue
+		}
+		row := DealRow(scanner.Text(), delimiter, enclose)
+
+		for key, value := range config {
+			if len(config[key]) != 0 {
+				key -= 1
+				row[key] = FmtFunc(row[key], value)
+			}
+
+		}
+		str := strings.Join(row, delimiter) + delimiter
+		fmt.Println(str)
+	}
+	return scanner.Err()
 }
