@@ -180,3 +180,7 @@ func ReadLines(path string, config map[int]string, delimiter string, enclose str
 	}
 	return scanner.Err()
 }
+
+func deal1() {
+	return 0;
+}
