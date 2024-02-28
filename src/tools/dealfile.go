@@ -181,6 +181,36 @@ func ReadLines(path string, config map[int]string, delimiter string, enclose str
 	return scanner.Err()
 }
 
+func DealEnClosed(str string, enclose string) int {
+	/**
+		1、不包含"返回 0
+	 	2、首尾包含"", 返回 2
+	 	3、仅左边包含, 返回 -1
+	 	4、仅右边包含, 返回 1
+	*/
+
+	//encloseByte := enclose[0]
+
+	lenStr := len(str)
+	lenEnclose := len(enclose)
+
+	if !strings.Contains(str, enclose) {
+		return 0
+	} else if str[0:lenEnclose] == enclose {
+
+		if str[lenStr-lenEnclose:lenStr] == enclose {
+			return 2
+		} else {
+			return -1
+		}
+	} else if str[lenStr-lenEnclose:lenStr] == enclose {
+		return 1
+	}
+	return 0
+}
+
+
 func deal1() {
 	return 0;
 }
+
