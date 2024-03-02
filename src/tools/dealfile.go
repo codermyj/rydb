@@ -209,6 +209,42 @@ func DealEnClosed(str string, enclose string) int {
 	return 0
 }
 
+func DealRow(str string, delimiter string, enclose string) []string {
+	row1 := strings.Split(str, delimiter)
+	var row []string
+
+	flag := true
+	var start int
+	var end int
+
+	//lenStr := len(str)
+	lenEnclose := len(enclose)
+
+	for i, v := range row1 {
+		if flag {
+			if DealEnClosed(v, enclose) == 0 {
+				row = append(row, v)
+			}
+			if DealEnClosed(v, enclose) == 2 {
+				row = append(row, v[lenEnclose:len(v)-lenEnclose])
+			}
+			if DealEnClosed(v, enclose) == -1 {
+				flag = false
+				start = i
+			}
+		} else {
+			if DealEnClosed(v, enclose) == 1 {
+				flag = true
+				end = i
+				tmp := strings.Join(row1[start:end+1], "\\"+delimiter)
+				row = append(row, tmp[lenEnclose:len(tmp)-lenEnclose])
+			}
+		}
+	}
+	return row
+}
+
+
 
 func deal1() {
 	return 0;
