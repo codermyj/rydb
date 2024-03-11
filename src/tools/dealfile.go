@@ -68,7 +68,20 @@ func FmtFunc(inTime string, fmtStr string) string {
 
 	outTime, err := time.Parse(fmtStr, inTime)
 	if err != nil {
-		return inTime
+		fmtStr = strings.ReplaceAll(fmtStr, "02", "2") // 2006-01-2 15:04:05
+		outTime, err = time.Parse(fmtStr, inTime)
+		if err != nil {
+			fmtStr = strings.ReplaceAll(fmtStr, "2 ", "02 ")
+			fmtStr = strings.ReplaceAll(fmtStr, "01", "1") // 2006-1-02 15:04:05
+			outTime, err = time.Parse(fmtStr, inTime)
+			if err != nil {
+				fmtStr = strings.ReplaceAll(fmtStr, "02", "2") // 2006-1-2 15:04:05
+				outTime, err = time.Parse(fmtStr, inTime)
+				if err != nil {
+					return inTime
+				}
+			}
+		}
 	}
 
 	return outTime.Format("2006-01-02 15:04:05")
@@ -244,9 +257,6 @@ func DealRow(str string, delimiter string, enclose string) []string {
 	return row
 }
 
-
-
-func deal1() {
-	return 0;
+func deal1() int {
+	return 0
 }
-
